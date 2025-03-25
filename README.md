@@ -100,12 +100,12 @@ This project aims to:
 # 🏆 Top XGBoost Feature Highlights:
 | Features  | Insights |
 | ------------- | ------------- |
-| category_gas_transport  | 🚗 Huge fraud signal — maybe due to card skimming at gas stations  |
-| amt  | 💵 Transaction size always matters  |
+| category_gas_transport  | Huge fraud signal — maybe due to card skimming at gas stations late night  |
+| amt  | 💵 Big amount may indicate frauds  |
 | category_food_dining  | 🍽️ Possibly where fraudsters test cards? |
 | category_grocery_net  | 🛒 Online groceries — fraudsters love low-attention merchants  |
 | category_travel  | ✈️ Big-ticket fraud target  |
-| hour  | ⏰ Time of day — likely helps detect off-hour transactions  |
+| hour  | ⏰ Time of day — 22 PM to 3 AM - more frauds committed  |
 
 ## 🔍 Key Takeaways
 - Common everyday transactions that don't trigger suspicion => Making accurate modelling difficult

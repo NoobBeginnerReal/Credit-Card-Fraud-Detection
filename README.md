@@ -1,3 +1,6 @@
+
+![1683165357635](https://github.com/user-attachments/assets/be386eb5-eaac-4fe0-929e-cc81f73a8daf)
+
 # 🏦 Credit Card Fraud Analysis I - March 23, 2025
 # 📌 Overview
 

@@ -8,17 +8,13 @@ We performed Exploratory Data Analysis to understand the relationships between v
 This project utilized basic hyperparameter tuning to improve models' output and performance, class balancing as well as feature importance to draw quick insights.
 
 # 🎯 Problem Statement
-Financial institutions face critical risks when lending to individuals who may default. Identifying risky applicants before approval can:
-
-- Reduce non-performing loans
-- Improve profitability
-- Streamline loan decision processes
+Financial institutions face critical risks when credit card frauds happen, resulted in losing money and exploitable security cracks, Identify frauds can prevent further losses:
 
 This project aims to:
 
-- Analyze key features influencing default.
-- Build classification models to predict default risk.
-- Optimize for recall to catch more potential defaulters.
+- Analyze key features influencing credit card fraud.
+- Build classification models to predict frauds.
+- Analyze patterns in fraudsters' behavior.
 
 # 📂 Dataset
 - Source: credit_card_fraud.csv (uploaded manually)

@@ -1,13 +1,11 @@
-# Credit-Card-Fraud-Detection I - March 23, 2025
-
-# 🏦 Credit Risk Analysis: Predicting Loan Defaults using Logistic Regression & XGBoost - March 17, 2025
+# 🏦 Credit Card Fraud Analysis I - March 23, 2025
 # 📌 Overview
 
-This project analyzes loan default risk using real-world financial data to help lenders make data-driven lending decisions. The goal is to develop a predictive yet interpretable model that identifies high-risk borrowers based on their demographics, employment history, credit behavior, and loan details.
+This project analyzes Credit Card fraud risk using real-world financial data to help banks make preventative data-driven decisions. The goal is to develop a predictive yet interpretable model that identifies fraudsters.
 
-We compare Logistic Regression (interpretable baseline) with XGBoost (powerful machine learning model) to evaluate trade-offs between explainability and predictive accuracy. The project incorporates threshold tuning, class balancing, feature importance analysis, and expected loss estimation to optimize loan approval strategies.
+We performed Exploratory Data Analysis to understand the relationships between variables and implemented Logistic Regression (baseline), Random Forest and XGBoost to evaluate predictive power between models.
 
-A key finding is that using XGBoost instead of Logistic Regression can reduce expected financial losses from $34M to $21M USD, highlighting its superior risk assessment capabilities.
+This project utilized basic hyperparameter tuning to improve models' output and performance, class balancing as well as feature importance to draw quick insights.
 
 # 🎯 Problem Statement
 Financial institutions face critical risks when lending to individuals who may default. Identifying risky applicants before approval can:
@@ -23,102 +21,102 @@ This project aims to:
 - Optimize for recall to catch more potential defaulters.
 
 # 📂 Dataset
-- Source: credit_risk_dataset.csv (uploaded manually)
-- Can be retrieved here: https://www.kaggle.com/datasets/laotse/credit-risk-dataset
-- Rows: 32,581
-- Target Variable: loan_status (1 = Default, 0 = No Default)
+- Source: credit_card_fraud.csv (uploaded manually)
+- Contains: date, time, merchant, amount, job, city and state
+- Rows: 339,607 credit card transactions
+- Target Variable: is_fraud (1 = fraud, 0 = legit)
 
 # 🔧 Methods: Preprocessing and Modelling
-We began with Logistic Regression to establish a strong, interpretable baseline model for predicting loan defaults. Given the class imbalance in the dataset (more non-defaulters than defaulters), we incorporated several preprocessing and tuning techniques. And then the XGB were also implemented to see if things improved:
 
 ✅ Data Preprocessing
-- Handled missing values:
-  - person_emp_length: Imputed using median
-  - loan_int_rate: Rows with missing values removed
-- Removed outliers in age and employment length (e.g., age > 100, employment > 60 years)
-- One-hot encoded categorical features (loan_intent, loan_grade, home_ownership, etc.)
-- Standardized all numeric features using StandardScaler
+- The data is relatively clean so no cleaning required
+- Some feature engineering and encoding was done before modelling
 
-⚙️ Model Setup: Logistic Regression
-- Classifier: LogisticRegression from scikit-learn
-- Key Parameters:
-  - solver='newton-cg'
-  - max_iter=10,000
-  - class_weight='balanced' (to mitigate class imbalance)
+⚙️ Feature engineering
+- Extracted time features from transaction timestamp (`hour`, `day_of_week`, `month`)
+- Calculated `age` from date of birth
+- Binned ages into age groups
+- Combined `city` + `state` for granular geo-analysis
+- Prepped for modeling (to be encoded)
+
+⚙️ Modeling:
+- Baseline: Logistic Regression
+- Advanced: Random Forest, XGBoost
+- Evaluation: Precision, Recall, F1, AUC
  
-⚙️ XGBoost Model Setup
-- Classifier: XGBClassifier from xgboost
-- Key Parameters:
-  - n_estimators=200 (number of boosting rounds)
-  - learning_rate=0.05 (controls step size in boosting)
-  - max_depth=5 (limits tree depth to prevent overfitting)
-  - scale_pos_weight=3 (adjusts for class imbalance)
-  - eval_metric='logloss' (used to track loss during training)
+⚙️ Tuning and Feature Importance
+- Performed both GridCV and RandomizedCV for practice purposes to further tune models
 
-# 📊 Logistic Regression Results
+# 📊 Logistic Regression Results (Class 1)
  | Metrics  | Value |
 | ------------- | ------------- |
-| Accuracy  | 0.80  |
-| Precision  | 0.54  |
-| Recall  | 0.77 |
-| F1 Score  | 0.64  |
-| ROC AUC  | 0.87  |
-| Log Loss  | 0.44  |
+| Accuracy  | .89  |
+| Precision  | 0.04  |
+| Recall  | 0.74 |
+| F1 Score  | 0.07  |
 
-✅ Insights:
-- The model identifies defaulters with good recall
-- Feature importance showed that:
-  - Loan interest rate, loan percent of income, and loan amount were the most influential factors
-  - Renters and low-grade borrowers were more likely to default
-
-# 📊 Extreme Gradient Boosting Results
+# 📊 Random Forest Results (Class 1)
  | Metrics  | Value |
 | ------------- | ------------- |
-| Accuracy  | 0.93  |
-| Precision  | 0.96  |
+| Accuracy  | 0.99  |
+| Precision  | 0.94  |
 | Recall  | 0.74 |
 | F1 Score  | 0.83  |
-| ROC AUC  | 0.95  |
-| Log Loss  | 0.2  |
 
 ✅ Insights:
-- Higher accuracy compared to Logistic Regression
-- Precision improved
-- Feature importance showed that:
-  - "Person_home_ownership_RENT" is the most important feature.
-  - Loan percent of income, loan grade, and debt consolidation loans are key risk indicators.
+- Improved precision and accuracy compared to Logistic Regression
 
-# 💡 Business Insights from Key Features
-Based on the feature importance analysis from XGBoost & Logistic Regression, we can extract practical business insights to optimize loan approval decisions, reduce risk, and enhance lending strategies.
-- 📌 1. Home Ownership Status (Top Predictor)
-  - Renters often have less financial stability than homeoweners
-  - Homeowners can use their property as collateral when in distress, making them less likely to default
-- 📌 2. Loan Percent of Income (loan_percent_income)
-  - A higher percentage means the borrower has less disposable income to cover unexpected expenses
-  - If income drops, default risk spikes
-- 📌 3. Loan Grade (loan_grade_C, loan_grade_D)
-  - Loan grades reflect creditworthiness & History
-  - Lower grades mean past financial issues, missed payments, or poor credit score
-- 📌 4. Loan Intent (Purpose of the Loan)
-  - Debt consolidation and medical loans have higher default risk
-  - Already struggled and unexpected loans
-- 📌 5. Interest Rate (loan_int_rate)
-  - Higher rates mean higher monthly payment, strain financial situations even more
-  - Borrowers with higher rates are often already risky
+# 📊 XGBoost Results (Class 1)
+ | Metrics  | Value |
+| ------------- | ------------- |
+| Accuracy  | 0.99  |
+| Precision  | 0.80  |
+| Recall  | 0.86 |
+| F1 Score  | 0.83  |
+
+✅ Insights:
+- Pretty balanced performance but still came short of Random Forest
+
+# 📊 Key EDA Insights
+
+### 1. **Fraud by Category**
+- Most frauds occurred in `shopping_pos`, `grocery_pos`, and `gas_transport`
+- `shopping_net` and `misc_net` categories had large-value fraud outliers
+
+### 2. **Time-Based Patterns**
+- Fraud spikes around midnight and early afternoon
+- Late-night fraud (10 PM – 3 AM) shows high activity in online categories
+
+### 3. **Geo Analysis**
+- California had the highest fraud volume, but smaller towns had disproportionately high fraud rates
+- Cities like Los Angeles, New York, and Chicago dominated in fraud volume
+
+### 4. **Age & Job**
+- Fraud most frequent among age 40–60
+- Technical professionals (e.g., engineers, analysts) experienced more fraud—likely victims of online compromise
+
+### 5. **Merchant Insights**
+- No single merchant dominated fraud, but certain combinations of job + category + time revealed risk patterns
+
+# 🏆 Top XGBoost Feature Highlights:
+| Features  | Insights |
+| ------------- | ------------- |
+| category_gas_transport  | 🚗 Huge fraud signal — maybe due to card skimming at gas stations  |
+| amt  | 💵 Transaction size always matters  |
+| category_food_dining  | 🍽️ Possibly where fraudsters test cards? |
+| category_grocery_net  | 🛒 Online groceries — fraudsters love low-attention merchants  |
+| category_travel  | ✈️ Big-ticket fraud target  |
+| hour  | ⏰ Time of day — likely helps detect off-hour transactions  |
 
 ## 🔍 Key Takeaways
- | Metrics  | Actionable Solution |
-| ------------- | ------------- |
-| Renters  | Stricter screening, higher rates  |
-| High Loan % of Income  | Limit loan-to-income ratio  |
-| Low Loan Grade  | Higher rates, secured loans |
-| Debt consolidation Loans  | Manual review, alternative solutions  |
-| Medical Loans  | Require proof of medical bills  |
-| High Interest Rate Loans  | Offer fixed rates to risky borrowers  |
+- Common everyday transactions that don't trigger suspicion => Making accurate modelling difficult
+- Fraud behavior usually happen during late night (10PM - 3AM)
+- Older people (40-60 years old) => likely victims of frauds
+- Frauds behavior is a blend of behavioral patterns, demographic and spending context
 
-# Model Implementation, Loans Strategy and Expected Losses
-For this project, we implemented a 85% Acceptance rate and ran a loan strategy as well as projected expected losses.
-## 💰 Expected Loss Reduction with XGBoost
-- Using Logistic Regression, expected loss at 85% loan approval rate = $34M USD
-- Using XGBoost, expected loss reduced to $21M USD = A $13M USD saved
-- ✅ XGBoost improves risk assessment and reduces bad loan losses by ~38%.
+## Immediate actions
+- 🔒 Prioritize Real-Time Monitoring: especially during late nights
+- Launch targeted awareness for customers aged 50+
+
+# Model Implementation
+- Further model implementation needed to anticipate expected losses
